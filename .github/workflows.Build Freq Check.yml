@@ -1,0 +1,27 @@
+name: Build mhz for R36S
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: dockcross/linux-arm64:latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          # Wir kompilieren das Tool direkt
+          aarch64-unknown-linux-gnu-gcc mhz.c -o mhz -O2
+          
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mhz-r36s
+          path: mhz
